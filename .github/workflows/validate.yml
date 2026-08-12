@@ -16,7 +16,13 @@ jobs:
       - name: HACS validation
         uses: hacs/action@main
         with:
-          category: plugin
+          category: integration
+
+  validate-hassfest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hassfest validation
+        uses: home-assistant/actions/hassfest@master
 
   test-card:
     runs-on: ubuntu-latest
@@ -24,8 +30,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
       - name: Check JavaScript syntax
-        run: node --check dist/wekker-card.js
-      - name: Check HACS build matches source
-        run: cmp --silent custom_cards/wekker-card/wekker-card.js dist/wekker-card.js
+        run: node --check custom_components/wekker_card/frontend/wekker-card.js
       - name: Run card resource tests
         run: node tests/test_resource_registration.js
+      - name: Run Python contract tests
+        run: |
+          python tests/test_algorithm.py
+          python tests/test_dashboard_contract.py
+          python tests/test_release_contract.py
