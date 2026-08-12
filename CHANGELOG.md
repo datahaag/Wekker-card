@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0
+
+- Wekkerkaart en backend samengevoegd tot één HACS-integratie.
+- Geen ZIP, Terminal-opdracht, package of wijziging in `configuration.yaml` meer nodig.
+- Config flow toegevoegd voor eenmalige activering via Apparaten & diensten.
+- Frontendkaart wordt door de integratie via een eigen statisch pad geladen.
+- Eigen persistente switch-, time-, number-, select-, text-, sensor- en button-entiteiten.
+- Exacte gebeurtenisgestuurde planning zonder periodieke statuscontrole.
+- Eenmalige import van instellingen uit het oude package.
+
 Alle opvallende wijzigingen worden in dit bestand bijgehouden volgens Keep a Changelog; versies volgen Semantic Versioning.
 
 ## [1.10.0] - 2026-08-12
