@@ -1,0 +1,22 @@
+# Voor knoppen die een action-sensor/entity bijwerken (bijvoorbeeld sommige Zigbee-integraties).
+# Vervang sensor.slaapkamerknop_action en de toestandswaarden.
+alias: Slaapkamerknop - Sonos wekker
+mode: restart
+triggers:
+  - trigger: state
+    entity_id: sensor.slaapkamerknop_action
+    to: single
+    id: short
+  - trigger: state
+    entity_id: sensor.slaapkamerknop_action
+    to: hold
+    id: long
+actions:
+  - choose:
+      - conditions: "{{ trigger.id == 'short' }}"
+        sequence:
+          - action: script.sonos_alarm_context_button
+      - conditions: "{{ trigger.id == 'long' }}"
+        sequence:
+          - action: script.sonos_alarm_stop
+

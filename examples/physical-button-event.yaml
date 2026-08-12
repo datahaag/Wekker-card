@@ -1,0 +1,25 @@
+# Voor knoppen die events publiceren (voorbeeldpayload; vervang device_id/command).
+alias: Slaapkamerknop event - Sonos wekker
+mode: restart
+triggers:
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: VERVANG_DIT_DEVICE_ID
+      command: single
+    id: short
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: VERVANG_DIT_DEVICE_ID
+      command: hold
+    id: long
+actions:
+  - choose:
+      - conditions: "{{ trigger.id == 'short' }}"
+        sequence:
+          - action: script.sonos_alarm_context_button
+      - conditions: "{{ trigger.id == 'long' }}"
+        sequence:
+          - action: script.sonos_alarm_stop
+
