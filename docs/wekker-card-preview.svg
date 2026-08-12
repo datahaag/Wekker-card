@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420" role="img" aria-label="Voorbeeld van Wekker-card">
+  <rect width="960" height="420" rx="34" fill="#25241f"/>
+  <rect x="70" y="45" width="820" height="330" rx="55" fill="#45423b" stroke="#171714" stroke-width="8"/>
+  <text x="480" y="82" text-anchor="middle" fill="#d7cbb2" font-family="Arial" font-size="20" font-weight="bold" letter-spacing="5">SONOS SMART ALARM</text>
+  <rect x="120" y="105" width="720" height="145" rx="18" fill="#160b09" stroke="#171714" stroke-width="9"/>
+  <text x="480" y="195" text-anchor="middle" fill="#ff4034" font-family="monospace" font-size="88" font-weight="bold">07:00:00</text>
+  <text x="150" y="230" fill="#bb706a" font-family="monospace" font-size="16">VOLGENDE WEKKER</text>
+  <text x="810" y="230" text-anchor="end" fill="#ff766d" font-family="monospace" font-size="20">maandag 07:00</text>
+  <rect x="120" y="275" width="720" height="62" rx="12" fill="#d7cbb2" stroke="#171714" stroke-width="4"/>
+  <circle cx="160" cy="306" r="12" fill="#58d455"/>
+  <text x="195" y="315" fill="#272620" font-family="Arial" font-size="28" font-weight="bold">WEKKER AAN</text>
+  <rect x="745" y="290" width="70" height="32" rx="16" fill="#5a574f"/>
+  <circle cx="797" cy="306" r="13" fill="#58d455"/>
+</svg>
