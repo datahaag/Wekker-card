@@ -1,5 +1,7 @@
 # Wekker-card voor Home Assistant
 
+[![Validate](https://github.com/datahaag/Wekker-card/actions/workflows/validate.yml/badge.svg)](https://github.com/datahaag/Wekker-card/actions/workflows/validate.yml)
+
 Een gebeurtenisgestuurde slimme wekker voor één Sonos-speaker, volledig gebouwd met native Home Assistant-functionaliteit en de officiële Sonos-integratie. De wekker ondersteunt afzonderlijke week- en weekendtijden, een automatisch berekende volume-opbouw, onbeperkt snoozen, stoppen van alleen de actuele cyclus, een fysieke knop en een compleet Lovelace-dashboard.
 
 ## Functies
