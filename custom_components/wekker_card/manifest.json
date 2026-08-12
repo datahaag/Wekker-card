@@ -1,0 +1,13 @@
+{
+  "domain": "wekker_card",
+  "name": "Wekker-card",
+  "codeowners": ["@datahaag"],
+  "config_flow": true,
+  "dependencies": ["frontend", "http"],
+  "documentation": "https://github.com/datahaag/Wekker-card",
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/datahaag/Wekker-card/issues",
+  "requirements": [],
+  "version": "2.0.0"
+}

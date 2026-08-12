@@ -1,0 +1,9 @@
+refresh_lists:
+  name: Keuzelijsten verversen
+  description: Zoekt Sonos-spelers, Sonos-favorieten, lampen en schakelaars opnieuw.
+snooze:
+  name: Snooze
+  description: Onderbreekt de actieve wekcyclus voor de ingestelde snoozeduur.
+stop:
+  name: Stop
+  description: Beëindigt alleen de huidige wekcyclus.
