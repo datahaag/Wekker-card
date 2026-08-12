@@ -1,0 +1,14 @@
+{
+  "title": "Wekker-card",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Wekker-card activeren",
+        "description": "Hiermee worden de Sonos-wekker, lichtwekker en retro dashboardkaart als één geheel geactiveerd. Er zijn geen aanvullende instellingen nodig."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Wekker-card is al geconfigureerd."
+    }
+  }
+}

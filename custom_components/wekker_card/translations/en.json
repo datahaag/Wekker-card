@@ -1,0 +1,14 @@
+{
+  "title": "Wekker-card",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Enable Wekker-card",
+        "description": "This enables the Sonos alarm, light alarm and retro dashboard card as one integration. No additional settings are required."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Wekker-card is already configured."
+    }
+  }
+}
