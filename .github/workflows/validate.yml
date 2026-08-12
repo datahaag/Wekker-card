@@ -1,0 +1,31 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  validate-hacs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: HACS validation
+        uses: hacs/action@main
+        with:
+          category: plugin
+
+  test-card:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: node --check dist/wekker-card.js
+      - name: Check HACS build matches source
+        run: cmp --silent custom_cards/wekker-card/wekker-card.js dist/wekker-card.js
+      - name: Run card resource tests
+        run: node tests/test_resource_registration.js
