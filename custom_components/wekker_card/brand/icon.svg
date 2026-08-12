@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Wekker-card">
+  <rect width="256" height="256" rx="56" fill="#292822"/>
+  <rect x="28" y="54" width="200" height="148" rx="34" fill="#4a473f" stroke="#171714" stroke-width="10"/>
+  <rect x="48" y="78" width="160" height="78" rx="12" fill="#160b09" stroke="#171714" stroke-width="7"/>
+  <text x="128" y="132" text-anchor="middle" fill="#ff493d" font-family="monospace" font-size="43" font-weight="bold">07:00</text>
+  <circle cx="75" cy="179" r="10" fill="#58d455"/>
+  <rect x="99" y="169" width="82" height="20" rx="10" fill="#d7cbb2"/>
+  <path d="M54 205l-17 25h42l-12-25zm148 0l17 25h-42l12-25z" fill="#292822"/>
+</svg>
