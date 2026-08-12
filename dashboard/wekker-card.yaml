@@ -1,7 +1,0 @@
-title: Sonos-wekker
-views:
-  - title: Wekker
-    path: wekker
-    icon: mdi:alarm
-    cards:
-      - type: custom:wekker-card
