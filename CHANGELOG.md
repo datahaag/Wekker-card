@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.2
+
+- De titelknop heeft nu een verhoogde rand, glans, slagschaduw en duidelijke drukanimatie.
+- Naast het rode of groene lampje staat voortaan expliciet **UIT** of **AAN**, zodat de bediening herkenbaar is als wekkerknop.
+
 ## 2.0.1
 
 - STOP pauzeert en stopt de geselecteerde Sonos-speler en alle actuele Sonos-groepsleden, zet het volume naar nul en schakelt de gekozen lamp of schakelaar uit.
