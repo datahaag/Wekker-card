@@ -27,6 +27,7 @@ from .const import (
 )
 from .media import stop_targets
 from .ramp import calculated_step_interval
+from .schedule import next_alarm_target
 
 _LOGGER = logging.getLogger(__name__)
 _STORE_VERSION = 1
@@ -235,7 +236,7 @@ class AlarmController:
         self._queue_save()
         self._notify()
 
-    async def async_schedule_next(self) -> None:
+    async def async_schedule_next(self, skip_through: datetime | None = None) -> None:
         """Calculate and schedule the next target and ramp start exactly once."""
         self._cancel_timers()
         self._cancel_ramp()
@@ -243,10 +244,12 @@ class AlarmController:
             return
 
         now = dt_util.now()
-        target = self._target_for_date(now, now.date())
-        if target <= now:
-            tomorrow = (now + timedelta(days=1)).date()
-            target = self._target_for_date(now, tomorrow)
+        target = next_alarm_target(
+            now,
+            self.data["weekday_time"],
+            self.data["weekend_time"],
+            skip_through,
+        )
         start = target - timedelta(minutes=float(self.data["ramp_minutes"]))
         self.data["target"] = target
         self.data["start"] = start
@@ -254,7 +257,8 @@ class AlarmController:
         self.data["status"] = "idle"
 
         async def start_alarm(_now) -> None:
-            await self.async_start_ramp()
+            if self.data.get("target") == target:
+                await self.async_start_ramp()
 
         if start > now:
             self._timer_cancels.append(async_track_point_in_time(self.hass, start_alarm, start))
@@ -265,14 +269,10 @@ class AlarmController:
 
     def _schedule_target_callback(self, target: datetime) -> None:
         async def reach_target(_now) -> None:
-            if self.data["status"] != "snoozed":
-                await self.async_ring()
+            if self.data.get("target") == target and self.data["status"] != "snoozed":
+                await self.async_ring(target)
 
         self._timer_cancels.append(async_track_point_in_time(self.hass, reach_target, target))
-
-    def _target_for_date(self, reference: datetime, date_value) -> datetime:
-        alarm_time = self.data["weekday_time"] if date_value.weekday() < 5 else self.data["weekend_time"]
-        return datetime.combine(date_value, alarm_time, tzinfo=reference.tzinfo)
 
     async def async_start_ramp(self) -> None:
         """Start or recalculate the active volume and brightness ramp."""
@@ -317,9 +317,14 @@ class AlarmController:
         except Exception:  # Home Assistant service failures must not kill future scheduling.
             _LOGGER.exception("Onverwachte fout tijdens de Wekker-card-opbouw")
 
-    async def async_ring(self) -> None:
+    def _target_is_current(self, target: datetime | None) -> bool:
+        """Reject work belonging to a cycle invalidated by STOP."""
+        return bool(self.data["enabled"] and target and self.data.get("target") == target)
+
+    async def async_ring(self, expected_target: datetime | None = None) -> None:
         """Reach the configured target level and keep the selected media playing."""
-        if not self.data["enabled"] or not self._media_is_valid():
+        target = expected_target or self.data.get("target")
+        if not self._target_is_current(target) or not self._media_is_valid():
             return
         current = self.hass.states.get(self.data["speaker_entity"])
         volume = float(self.data["normal_volume"]) / 100
@@ -327,7 +332,15 @@ class AlarmController:
             await self._play_media(volume)
         else:
             await self._set_volume(volume)
+        if not self._target_is_current(target):
+            await self._stop_media()
+            await self._set_light(0)
+            return
         await self._set_light(float(self.data["light_brightness"]))
+        if not self._target_is_current(target):
+            await self._stop_media()
+            await self._set_light(0)
+            return
         self.data["status"] = "ringing"
         self.data["snooze_until"] = None
         self._changed()
@@ -361,15 +374,18 @@ class AlarmController:
 
     async def async_stop(self, schedule_next: bool = True) -> None:
         """Stop the current cycle while optionally keeping the weekly schedule enabled."""
+        stopped_target = self.data.get("target")
         self._cancel_ramp()
         self._cancel_timers()
-        await self._stop_media()
-        await self._set_light(0)
         self.data["status"] = "idle"
+        self.data["target"] = None
+        self.data["start"] = None
         self.data["snooze_until"] = None
         self._changed()
+        await self._stop_media()
+        await self._set_light(0)
         if schedule_next and self.data["enabled"]:
-            await self.async_schedule_next()
+            await self.async_schedule_next(skip_through=stopped_target)
 
     async def async_refresh_lists(self) -> None:
         """Discover Sonos players, all lights/switches and Sonos favorites on demand."""
