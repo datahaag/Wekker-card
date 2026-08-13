@@ -9,7 +9,7 @@ from homeassistant.const import Platform
 
 DOMAIN: Final = "wekker_card"
 NAME: Final = "Wekker-card"
-VERSION: Final = "2.0.3"
+VERSION: Final = "2.0.4"
 
 PLATFORMS: Final = (
     Platform.BUTTON,
