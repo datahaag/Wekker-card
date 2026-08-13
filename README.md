@@ -41,9 +41,17 @@ type: custom:wekker-card
 
 ## Wekker bedienen
 
-Open de kaarttab **WEKKER** en druk op de brede knop **WEKKER UIT**. De knop verandert in **WEKKER AAN** en het statuslampje wordt groen. **STOP** beëindigt alleen de huidige cyclus; het weekschema blijft ingeschakeld. **SNOOZE** pauzeert de actieve cyclus gedurende de ingestelde snoozeduur.
+Klik bovenaan op **SONOS SMART ALARM** om het weekschema in of uit te schakelen. De punt is rood wanneer de wekker uitstaat en groen wanneer hij actief is. **STOP** stopt de muziek en het licht van alleen de huidige cyclus; het weekschema blijft ingeschakeld. **SNOOZE** pauzeert de actieve cyclus gedurende de ingestelde snoozeduur.
 
 Open **INSTELLINGEN** om de Sonos-speler, favoriet of stream, tijden, volumes, lichtbron en helderheid te kiezen. Druk op **VERVERS** wanneer een nieuwe Sonos-speler, favoriet, lamp of schakelaar is toegevoegd.
+
+## Externe schakelaars en knoppen
+
+De wekker kan vanuit iedere aparte Home Assistant-automatisering worden bediend. Gebruik `switch.wekker_card_enabled` voor aan/uit en druk vanuit een automatisering op `button.wekker_card_snooze` of `button.wekker_card_stop`. Volledige voorbeelden staan in [docs/automations.md](docs/automations.md).
+
+## Bijwerken via HACS
+
+Nieuwe releases verschijnen in HACS als update. Open **HACS → Wekker-card → Bijwerken** en herstart daarna Home Assistant. De integratie gebruikt bij iedere versie een nieuwe frontend-URL, zodat de bijgewerkte kaart niet door een oude browsercache wordt vervangen.
 
 ## Migratie vanaf 1.x
 

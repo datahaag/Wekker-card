@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.1
+
+- STOP pauzeert en stopt de geselecteerde Sonos-speler en alle actuele Sonos-groepsleden, zet het volume naar nul en schakelt de gekozen lamp of schakelaar uit.
+- De titel **SONOS SMART ALARM** is nu de hoofdschakelaar; de punt is rood bij uit en groen bij aan.
+- Het grote wekker-schakelblok is verwijderd en de grotere SNOOZE- en STOP-knoppen staan hoger.
+- Voorbeelden toegevoegd voor bediening via een losse schakelaar en fysieke snooze-/stopknoppen.
+- De handmatige volume-intervalinstelling is verwijderd; het interval wordt automatisch berekend uit opbouwtijd en volumebereik.
+- Versienummer en frontend-cacheparameter bijgewerkt zodat HACS versie 2.0.1 correct kan aanbieden.
+
 ## 2.0.0
 
 - Wekkerkaart en backend samengevoegd tot één HACS-integratie.
