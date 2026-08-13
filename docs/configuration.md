@@ -9,7 +9,7 @@ Alle instellingen staan op het tabblad **INSTELLINGEN** van de kaart en worden d
 | `time.wekker_card_weekend` | Zaterdag en zondag | 09:00 |
 | `number.wekker_card_start_volume` | Beginvolume | 2% |
 | `number.wekker_card_normal_volume` | Volume op wektijd | 30% |
-| `number.wekker_card_ramp_minutes` | Opbouwtijd | 15 min |
+| `number.wekker_card_ramp_minutes` | Starttijd voor de wekker (rustig wakker worden) | 15 min |
 | `number.wekker_card_snooze_minutes` | Snoozeduur | 9 min |
 | `select.wekker_card_speaker` | Sonos-speler | selecteren |
 | `select.wekker_card_favorite` | Mijn Sonos/Favoriet | selecteren |
