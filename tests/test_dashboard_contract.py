@@ -26,6 +26,11 @@ def test_event_driven_controller() -> None:
     assert '"media_pause", targets' in ALARM
     assert '"media_stop", targets' in ALARM
     assert 'state.attributes.get("group_members", [])' in ALARM
+    assert "skip_through=stopped_target" in ALARM
+    assert 'self.data["target"] = None' in ALARM
+    assert 'self.data.get("target") == target' in ALARM
+    assert "await self.async_ring(target)" in ALARM
+    assert "if not self._target_is_current(target):" in ALARM
     stop_body = ALARM.split("async def async_stop", 1)[1].split("async def", 1)[0]
     assert "await self._stop_media()" in stop_body
     assert "await self._set_light(0)" in stop_body
