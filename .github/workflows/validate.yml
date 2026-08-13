@@ -38,5 +38,7 @@ jobs:
       - name: Run Python contract tests
         run: |
           python tests/test_algorithm.py
+          python tests/test_ramp_interval.py
+          python tests/test_stop_targets.py
           python tests/test_dashboard_contract.py
           python tests/test_release_contract.py
