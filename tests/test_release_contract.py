@@ -11,11 +11,11 @@ def test_hacs_integration_layout() -> None:
     assert hacs == {"name": "Wekker-card", "render_readme": True}
     assert manifest["domain"] == "wekker_card"
     assert manifest["config_flow"] is True
-    assert manifest["version"] == "2.0.0"
+    assert manifest["version"] == "2.0.1"
     assert manifest["requirements"] == []
 
 def test_all_runtime_files_live_in_component() -> None:
-    required = {"__init__.py", "alarm.py", "button.py", "config_flow.py", "const.py", "entity.py", "manifest.json", "number.py", "select.py", "sensor.py", "services.yaml", "switch.py", "text.py", "time.py", "frontend/wekker-card.js", "translations/en.json", "translations/nl.json"}
+    required = {"__init__.py", "alarm.py", "button.py", "config_flow.py", "const.py", "entity.py", "manifest.json", "media.py", "number.py", "ramp.py", "select.py", "sensor.py", "services.yaml", "switch.py", "text.py", "time.py", "frontend/wekker-card.js", "translations/en.json", "translations/nl.json"}
     actual = {path.relative_to(COMPONENT).as_posix() for path in COMPONENT.rglob("*") if path.is_file() and "__pycache__" not in path.parts}
     assert required <= actual
 
