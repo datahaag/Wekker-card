@@ -1,4 +1,4 @@
-const CARD_VERSION = "2.0.2";
+const CARD_VERSION = "2.0.3";
 
 class WekkerCard extends HTMLElement {
   static getStubConfig() {
@@ -217,7 +217,7 @@ class WekkerCard extends HTMLElement {
         <div class="form-grid">
           ${this._number(c.start_volume_entity, "Startvolume", "%")}
           ${this._number(c.normal_volume_entity, "Normaal wekvolume", "%")}
-          ${this._number(c.ramp_minutes_entity, "Opbouwtijd", " min")}
+          ${this._number(c.ramp_minutes_entity, "Starttijd voor de wekker (rustig wakker worden)", " min")}
           ${this._number(c.snooze_minutes_entity, "Snoozeduur", " min")}
         </div>
 
