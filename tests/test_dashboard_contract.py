@@ -52,6 +52,11 @@ def test_card_uses_integration_entities() -> None:
     assert "step_interval" not in CARD
     assert "step_interval" not in CONST
     assert "step_interval" not in NUMBERS
+    label = "Starttijd voor de wekker (rustig wakker worden)"
+    assert label in CARD
+    assert label in NUMBERS
+    assert "Opbouwtijd" not in CARD
+    assert "Opbouwtijd" not in NUMBERS
 
 if __name__ == "__main__":
     tests = [value for name, value in globals().copy().items() if name.startswith("test_")]
