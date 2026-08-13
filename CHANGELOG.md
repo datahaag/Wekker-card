@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.4
+
+- STOP annuleert de volledige huidige wekcyclus, ook wanneer de ingestelde wektijd nog niet is bereikt.
+- Na STOP blijven Sonos en de gekozen lamp uit; de wekker plant pas de eerstvolgende wekdag opnieuw in.
+- Verouderde gelijktijdige tijdcallbacks kunnen een gestopte cyclus niet opnieuw activeren.
+
 ## 2.0.3
 
 - De instelling **Opbouwtijd** heet nu **Starttijd voor de wekker (rustig wakker worden)**, zowel op de kaart als bij de Home Assistant-entiteit.
