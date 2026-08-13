@@ -10,7 +10,6 @@ Alle instellingen staan op het tabblad **INSTELLINGEN** van de kaart en worden d
 | `number.wekker_card_start_volume` | Beginvolume | 2% |
 | `number.wekker_card_normal_volume` | Volume op wektijd | 30% |
 | `number.wekker_card_ramp_minutes` | Opbouwtijd | 15 min |
-| `number.wekker_card_step_interval` | Tijd tussen apparaatstappen | 30 s |
 | `number.wekker_card_snooze_minutes` | Snoozeduur | 9 min |
 | `select.wekker_card_speaker` | Sonos-speler | selecteren |
 | `select.wekker_card_favorite` | Mijn Sonos/Favoriet | selecteren |
