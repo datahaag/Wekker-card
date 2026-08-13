@@ -45,6 +45,8 @@ def test_card_uses_integration_entities() -> None:
     assert 'customElements.define("wekker-card"' in CARD
     assert 'data-tab="clock"' in CARD and 'data-tab="settings"' in CARD
     assert 'class="brand-toggle ${enabled ? "on" : "off"}"' in CARD
+    assert 'class="brand-state">${enabled ? "AAN" : "UIT"}' in CARD
+    assert "box-shadow:inset 0 1px 0 #8a8478,0 4px 0 #171613" in CARD
     assert 'class="power-switch' not in CARD
     assert "muziek + licht" in CARD
     assert "step_interval" not in CARD

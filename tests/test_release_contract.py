@@ -11,7 +11,7 @@ def test_hacs_integration_layout() -> None:
     assert hacs == {"name": "Wekker-card", "render_readme": True}
     assert manifest["domain"] == "wekker_card"
     assert manifest["config_flow"] is True
-    assert manifest["version"] == "2.0.1"
+    assert manifest["version"] == "2.0.2"
     assert manifest["requirements"] == []
 
 def test_all_runtime_files_live_in_component() -> None:
