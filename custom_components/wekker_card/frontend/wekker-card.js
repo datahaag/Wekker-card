@@ -1,4 +1,4 @@
-const CARD_VERSION = "2.0.1";
+const CARD_VERSION = "2.0.2";
 
 class WekkerCard extends HTMLElement {
   static getStubConfig() {
@@ -296,7 +296,8 @@ class WekkerCard extends HTMLElement {
           <header>
             <button class="brand-toggle ${enabled ? "on" : "off"}" data-action="toggle-alarm" aria-pressed="${enabled}" title="Wekker ${enabled ? "uitschakelen" : "inschakelen"}">
               <span class="brand-dot"></span>
-              <span>${this._escape(this._config.name)}</span>
+              <span class="brand-name">${this._escape(this._config.name)}</span>
+              <span class="brand-state">${enabled ? "AAN" : "UIT"}</span>
               <small>v${CARD_VERSION}</small>
             </button>
           </header>
@@ -367,10 +368,10 @@ class WekkerCard extends HTMLElement {
       .alarm-case::before { left:38px; transform:skew(-12deg); }.alarm-case::after { right:38px; transform:skew(12deg); }
       .screw { position:absolute; top:14px; width:10px; height:10px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#aaa38f,#34332d 60%); box-shadow:0 1px 2px #111; }.screw::after { content:""; position:absolute; left:2px; right:2px; top:4px; border-top:1px solid #171714; }.screw-left{left:14px}.screw-right{right:14px}
       header { margin:0 20px 12px; text-align:center; }
-      .brand-toggle { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:30px; padding:4px 11px; border:1px solid transparent; border-radius:8px; color:var(--cream); background:transparent; font-weight:900; font-size:13px; letter-spacing:2.5px; text-shadow:0 1px #111; cursor:pointer; }
-      .brand-toggle:hover,.brand-toggle:focus-visible { border-color:#777166; background:#29282488; outline:none; }
-      .brand-toggle:active { transform:translateY(1px); }
-      .brand-toggle small{font-size:8px;opacity:.55;margin-left:1px}.brand-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#c84132;box-shadow:0 0 7px #c84132}.brand-toggle.on .brand-dot{background:#58d455;box-shadow:0 0 9px #52e750,inset 0 1px #d7ffd5}
+      .brand-toggle { display:inline-grid; grid-template-columns:auto auto auto auto; align-items:center; justify-content:center; gap:8px; min-height:38px; padding:6px 12px; border:2px solid #1c1b18; border-radius:10px; color:var(--cream); background:linear-gradient(#5c584f,#34322d); box-shadow:inset 0 1px 0 #8a8478,0 4px 0 #171613,0 6px 9px #1119; font-weight:900; font-size:12px; letter-spacing:1.8px; text-shadow:0 1px #111; cursor:pointer; transition:filter .15s,transform .08s,box-shadow .08s; }
+      .brand-toggle:hover,.brand-toggle:focus-visible { filter:brightness(1.14); outline:2px solid #c9bda455; outline-offset:2px; }
+      .brand-toggle:active { transform:translateY(3px); box-shadow:inset 0 1px 3px #111,0 1px 0 #171613,0 2px 4px #111; }
+      .brand-toggle small{font-size:7px;opacity:.48;margin-left:1px}.brand-name{white-space:nowrap}.brand-state{min-width:34px;padding:3px 5px;border:1px solid #171613;border-radius:5px;background:#25241f;color:#e88a80;font:900 8px ui-monospace,monospace;letter-spacing:1px;box-shadow:inset 0 1px 3px #111}.brand-toggle.on .brand-state{color:#80e77d}.brand-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#c84132;box-shadow:0 0 8px #c84132,inset 0 1px #ff9b91}.brand-toggle.on .brand-dot{background:#58d455;box-shadow:0 0 10px #52e750,inset 0 1px #d7ffd5}
       nav { display:grid; grid-template-columns:1fr 1fr; gap:5px; padding:4px; margin-bottom:10px; border-radius:9px; background:#24231f; box-shadow:inset 0 2px 4px #111; } nav button { border:0; border-radius:6px; padding:8px 5px; background:transparent; color:#8e897d; font-size:11px; font-weight:900; letter-spacing:1.2px; cursor:pointer; } nav button.active { color:#292823; background:linear-gradient(#dfd4bd,#b8ad98); box-shadow:0 2px 4px #111; }
       .display-bezel { border:4px solid #201f1b; border-radius:13px; padding:11px 14px 12px; background:radial-gradient(ellipse at center,#351713 0%,var(--display) 70%); box-shadow:inset 0 0 13px #000,0 2px 1px #716c61; color:var(--red); }
       .display-topline { display:flex; justify-content:space-between; color:#93665d; font:700 10px/1.1 ui-monospace,monospace; letter-spacing:1.4px; }.alarm-indicator{color:#4e2722}.alarm-indicator.lit{color:#ff5549;text-shadow:0 0 7px #ff2e23}
