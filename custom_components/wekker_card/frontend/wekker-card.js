@@ -1,4 +1,4 @@
-const CARD_VERSION = "2.0.3";
+const CARD_VERSION = "2.0.4";
 
 class WekkerCard extends HTMLElement {
   static getStubConfig() {
