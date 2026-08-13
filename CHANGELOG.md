@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.3
+
+- De instelling **Opbouwtijd** heet nu **Starttijd voor de wekker (rustig wakker worden)**, zowel op de kaart als bij de Home Assistant-entiteit.
+
 ## 2.0.2
 
 - De titelknop heeft nu een verhoogde rand, glans, slagschaduw en duidelijke drukanimatie.
