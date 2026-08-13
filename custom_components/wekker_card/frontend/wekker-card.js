@@ -1,4 +1,4 @@
-const CARD_VERSION = "2.0.0";
+const CARD_VERSION = "2.0.1";
 
 class WekkerCard extends HTMLElement {
   static getStubConfig() {
@@ -43,7 +43,6 @@ class WekkerCard extends HTMLElement {
       start_volume_entity: "number.wekker_card_start_volume",
       normal_volume_entity: "number.wekker_card_normal_volume",
       ramp_minutes_entity: "number.wekker_card_ramp_minutes",
-      step_interval_entity: "number.wekker_card_step_interval",
       snooze_minutes_entity: "number.wekker_card_snooze_minutes",
       light_enabled_entity: "switch.wekker_card_light_enabled",
       light_select_entity: "select.wekker_card_light",
@@ -219,7 +218,6 @@ class WekkerCard extends HTMLElement {
           ${this._number(c.start_volume_entity, "Startvolume", "%")}
           ${this._number(c.normal_volume_entity, "Normaal wekvolume", "%")}
           ${this._number(c.ramp_minutes_entity, "Opbouwtijd", " min")}
-          ${this._number(c.step_interval_entity, "Volume-interval", " s")}
           ${this._number(c.snooze_minutes_entity, "Snoozeduur", " min")}
         </div>
 
@@ -272,12 +270,6 @@ class WekkerCard extends HTMLElement {
           <div class="source-line"><span>WEKBRON</span><strong>${this._escape(sourceName)}</strong></div>
         </div>
 
-        <button class="power-switch ${enabled ? "on" : "off"}" data-action="toggle-alarm" aria-pressed="${enabled}">
-          <span class="power-lamp"></span>
-          <span><small>WEKKER</small>${enabled ? "AAN" : "UIT"}</span>
-          <span class="switch-track"><i></i></span>
-        </button>
-
         <div class="meter-row">
           <div class="meter"><small>STATUS</small><strong>${this._escape(this._statusLabel(status))}</strong></div>
           <div class="meter"><small>VOLUME</small><strong>${this._escape(volumeText)}${volumeText === "—" ? "" : "%"}</strong></div>
@@ -287,20 +279,27 @@ class WekkerCard extends HTMLElement {
 
         <div class="alarm-buttons">
           <button class="snooze" data-action="snooze"><span>SNOOZE</span><small>nog ${this._escape(this._state(c.snooze_minutes_entity, "9"))} minuten</small></button>
-          <button class="stop" data-action="stop"><span>STOP</span><small>deze wekcyclus</small></button>
+          <button class="stop" data-action="stop"><span>STOP</span><small>muziek + licht</small></button>
         </div>
       </section>`;
   }
 
   _render() {
     if (!this._config || !this._hass) return;
+    const enabled = this._state(this._config.enabled_entity, "off") === "on";
     const missing = [this._config.enabled_entity, this._config.status_entity].filter((entity) => !this._hass.states[entity]);
     this.shadowRoot.innerHTML = `
       <style>${this._styles()}</style>
       <ha-card>
         <div class="alarm-case">
           <i class="screw screw-left"></i><i class="screw screw-right"></i>
-          <header><span class="brand-dot"></span>${this._escape(this._config.name)}<small>v${CARD_VERSION}</small></header>
+          <header>
+            <button class="brand-toggle ${enabled ? "on" : "off"}" data-action="toggle-alarm" aria-pressed="${enabled}" title="Wekker ${enabled ? "uitschakelen" : "inschakelen"}">
+              <span class="brand-dot"></span>
+              <span>${this._escape(this._config.name)}</span>
+              <small>v${CARD_VERSION}</small>
+            </button>
+          </header>
           ${missing.length ? `<div class="warning">Ontbrekende entities: ${this._escape(missing.join(", "))}. Voeg Wekker-card eerst toe bij Instellingen → Apparaten & diensten.</div>` : ""}
           <nav>
             <button class="${this._tab === "clock" ? "active" : ""}" data-tab="clock">WEKKER</button>
@@ -367,15 +366,19 @@ class WekkerCard extends HTMLElement {
       .alarm-case::before,.alarm-case::after { content:""; position:absolute; bottom:-9px; width:42px; height:13px; border-radius:0 0 9px 9px; background:#24231f; z-index:-1; }
       .alarm-case::before { left:38px; transform:skew(-12deg); }.alarm-case::after { right:38px; transform:skew(12deg); }
       .screw { position:absolute; top:14px; width:10px; height:10px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#aaa38f,#34332d 60%); box-shadow:0 1px 2px #111; }.screw::after { content:""; position:absolute; left:2px; right:2px; top:4px; border-top:1px solid #171714; }.screw-left{left:14px}.screw-right{right:14px}
-      header { color:var(--cream); text-align:center; font-weight:900; font-size:13px; letter-spacing:2.5px; text-shadow:0 1px #111; margin:0 20px 12px; } header small{font-size:8px;opacity:.55;margin-left:8px}.brand-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#c84132;margin-right:8px;box-shadow:0 0 7px #c84132}
+      header { margin:0 20px 12px; text-align:center; }
+      .brand-toggle { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:30px; padding:4px 11px; border:1px solid transparent; border-radius:8px; color:var(--cream); background:transparent; font-weight:900; font-size:13px; letter-spacing:2.5px; text-shadow:0 1px #111; cursor:pointer; }
+      .brand-toggle:hover,.brand-toggle:focus-visible { border-color:#777166; background:#29282488; outline:none; }
+      .brand-toggle:active { transform:translateY(1px); }
+      .brand-toggle small{font-size:8px;opacity:.55;margin-left:1px}.brand-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#c84132;box-shadow:0 0 7px #c84132}.brand-toggle.on .brand-dot{background:#58d455;box-shadow:0 0 9px #52e750,inset 0 1px #d7ffd5}
       nav { display:grid; grid-template-columns:1fr 1fr; gap:5px; padding:4px; margin-bottom:10px; border-radius:9px; background:#24231f; box-shadow:inset 0 2px 4px #111; } nav button { border:0; border-radius:6px; padding:8px 5px; background:transparent; color:#8e897d; font-size:11px; font-weight:900; letter-spacing:1.2px; cursor:pointer; } nav button.active { color:#292823; background:linear-gradient(#dfd4bd,#b8ad98); box-shadow:0 2px 4px #111; }
       .display-bezel { border:4px solid #201f1b; border-radius:13px; padding:11px 14px 12px; background:radial-gradient(ellipse at center,#351713 0%,var(--display) 70%); box-shadow:inset 0 0 13px #000,0 2px 1px #716c61; color:var(--red); }
       .display-topline { display:flex; justify-content:space-between; color:#93665d; font:700 10px/1.1 ui-monospace,monospace; letter-spacing:1.4px; }.alarm-indicator{color:#4e2722}.alarm-indicator.lit{color:#ff5549;text-shadow:0 0 7px #ff2e23}
       .digital-time { text-align:center; white-space:nowrap; font:800 clamp(40px,13vw,76px)/1.05 "Courier New",ui-monospace,monospace; letter-spacing:-4px; color:#ff4034; text-shadow:0 0 4px #ff2d22,0 0 13px rgba(255,42,28,.72); font-variant-numeric:tabular-nums; }
       .next-alarm { display:flex; justify-content:space-between; align-items:baseline; padding-top:7px; border-top:1px solid #5f2720; font:700 10px ui-monospace,monospace; letter-spacing:1px; color:#a56a61; }.next-alarm strong{font-size:14px;color:#ff766d;text-align:right}.schedule-times{display:flex;justify-content:flex-end;gap:14px;margin-top:6px;font:700 8px ui-monospace,monospace;letter-spacing:.7px;color:#75453e}.schedule-times strong{color:#cc7770;font-size:10px}.source-line{display:flex;justify-content:space-between;gap:10px;margin-top:6px;padding-top:5px;border-top:1px dotted #4b2723;font:700 8px ui-monospace,monospace;letter-spacing:.7px;color:#75453e}.source-line strong{max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#bb706a;font-size:9px}
-      .power-switch { width:100%; margin:12px 0 10px; padding:9px 12px; display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center; border:2px solid #22211e; border-radius:9px; color:#272620; background:linear-gradient(#e1d7c1,#afa38d); box-shadow:0 3px 0 #191815,0 5px 7px #111; cursor:pointer; text-align:left; }.power-switch small{display:block;font-size:8px;letter-spacing:1.2px}.power-switch span:nth-child(2){font-size:18px;font-weight:1000;letter-spacing:2px}.power-lamp{width:13px;height:13px;border-radius:50%;background:#5c1813;box-shadow:inset 0 1px 2px #111}.power-switch.on .power-lamp{background:#58d455;box-shadow:0 0 9px #52e750,inset 0 1px #d7ffd5}.switch-track{width:54px;height:24px;padding:3px;border-radius:14px;background:#5a574f;box-shadow:inset 0 2px 4px #222}.switch-track i{display:block;width:18px;height:18px;border-radius:50%;background:#ddd2ba;transition:transform .18s}.power-switch.on .switch-track i{transform:translateX(30px);background:#5cda57}
-      .meter-row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }.meter { min-width:0; padding:8px 5px; text-align:center; border:1px solid #1b1a17; border-radius:7px; color:#d4c9b2; background:#292824; box-shadow:inset 0 1px 3px #111; }.meter small{display:block;color:#827d72;font-size:8px;letter-spacing:1px}.meter strong{display:block;overflow:hidden;text-overflow:ellipsis;font:800 14px/1.5 ui-monospace,monospace;color:#e8dcc3}
-      .alarm-buttons { display:grid; grid-template-columns:1.5fr 1fr; gap:10px; margin-top:12px; }.alarm-buttons button { min-height:62px; border:2px solid #1e1d1a; border-radius:10px; box-shadow:0 4px 0 #171613,0 6px 8px #111; cursor:pointer; font-weight:1000; letter-spacing:1.5px; }.alarm-buttons button:active{transform:translateY(3px);box-shadow:0 1px 0 #171613}.alarm-buttons span,.alarm-buttons small{display:block}.alarm-buttons span{font-size:18px}.alarm-buttons small{font-size:8px;opacity:.7;margin-top:4px}.snooze{color:#27251f;background:linear-gradient(#eadba3,#bca964)}.stop{color:#fff3ec;background:linear-gradient(#d14b3d,#8d2019)}
+      .power-lamp{width:13px;height:13px;border-radius:50%;background:#5c1813;box-shadow:inset 0 1px 2px #111}
+      .meter-row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-top:9px; }.meter { min-width:0; padding:8px 5px; text-align:center; border:1px solid #1b1a17; border-radius:7px; color:#d4c9b2; background:#292824; box-shadow:inset 0 1px 3px #111; }.meter small{display:block;color:#827d72;font-size:8px;letter-spacing:1px}.meter strong{display:block;overflow:hidden;text-overflow:ellipsis;font:800 14px/1.5 ui-monospace,monospace;color:#e8dcc3}
+      .alarm-buttons { display:grid; grid-template-columns:1.5fr 1fr; gap:10px; margin-top:9px; }.alarm-buttons button { min-height:72px; border:2px solid #1e1d1a; border-radius:10px; box-shadow:0 4px 0 #171613,0 6px 8px #111; cursor:pointer; font-weight:1000; letter-spacing:1.5px; }.alarm-buttons button:active{transform:translateY(3px);box-shadow:0 1px 0 #171613}.alarm-buttons span,.alarm-buttons small{display:block}.alarm-buttons span{font-size:19px}.alarm-buttons small{font-size:8px;opacity:.7;margin-top:4px}.snooze{color:#27251f;background:linear-gradient(#eadba3,#bca964)}.stop{color:#fff3ec;background:linear-gradient(#d14b3d,#8d2019)}
       .settings-panel { padding:11px; border-radius:12px; background:linear-gradient(#ded3bc,#bcb09a); box-shadow:inset 0 2px 4px #fff8,inset 0 -2px 4px #6c6457; }.section-label{margin:12px 0 7px;padding-bottom:4px;border-bottom:2px solid #827866;color:#4a463e;font-size:10px;font-weight:1000;letter-spacing:1.8px}.section-label:first-child{margin-top:1px}.form-grid{display:grid;grid-template-columns:1fr;gap:8px}.two-columns{grid-template-columns:repeat(2,minmax(0,1fr))}.field{display:flex;flex-direction:column;gap:4px;min-width:0}.field span{font-size:10px;font-weight:800;color:#4e493f}.field input,.field select{width:100%;min-width:0;border:1px solid #77705f;border-radius:6px;padding:9px;color:#26241f;background:#f1e8d4;box-shadow:inset 0 1px 3px #7775;outline:none}.field input:focus,.field select:focus{border-color:#a52c23;box-shadow:0 0 0 2px #b9332944}.range-field input{padding:0;accent-color:#b33127}.range-field span{display:flex;justify-content:space-between}.range-field output{font:900 12px ui-monospace,monospace;color:#9b281f}
       .settings-toggle{width:100%;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px;padding:9px 11px;border:1px solid #77705f;border-radius:7px;background:#a99f8c;color:#37332c;text-align:left;cursor:pointer}.settings-toggle small{display:block;font-size:8px;letter-spacing:1px}.settings-toggle span:nth-child(2){font-weight:1000;letter-spacing:1px}.settings-toggle.enabled{background:#bed5ae}.settings-toggle.enabled .power-lamp{background:#58d455;box-shadow:0 0 8px #4fe34c}.field-hint{margin:0;color:#5f584c;font-size:10px;line-height:1.4}
       .refresh-button{width:100%;padding:9px;border:1px solid #675f50;border-radius:6px;background:#827866;color:#fff7e7;font-size:9px;font-weight:900;letter-spacing:.8px;cursor:pointer}
