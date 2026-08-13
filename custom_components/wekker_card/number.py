@@ -6,7 +6,7 @@ from .entity import WekkerEntity
 DESCRIPTIONS = (
     ("start_volume", "Startvolume", "mdi:volume-low", 1, 100, "%"),
     ("normal_volume", "Normaal wekvolume", "mdi:volume-high", 1, 100, "%"),
-    ("ramp_minutes", "Opbouwtijd", "mdi:chart-line", 1, 60, "min"),
+    ("ramp_minutes", "Starttijd voor de wekker (rustig wakker worden)", "mdi:chart-line", 1, 60, "min"),
     ("snooze_minutes", "Snoozeduur", "mdi:sleep", 1, 60, "min"),
     ("light_brightness", "Doelhelderheid lichtwekker", "mdi:brightness-6", 1, 100, "%"),
 )
