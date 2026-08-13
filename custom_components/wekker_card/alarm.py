@@ -25,6 +25,8 @@ from .const import (
     SPEAKER_NONE,
     STATUS_OPTIONS,
 )
+from .media import stop_targets
+from .ramp import calculated_step_interval
 
 _LOGGER = logging.getLogger(__name__)
 _STORE_VERSION = 1
@@ -164,7 +166,6 @@ class AlarmController:
             "start_volume": "input_number.sonos_alarm_start_volume",
             "normal_volume": "input_number.sonos_alarm_normal_volume",
             "ramp_minutes": "input_number.sonos_alarm_ramp_minutes",
-            "step_interval": "input_number.sonos_alarm_step_interval",
             "snooze_minutes": "input_number.sonos_alarm_snooze_minutes",
             "light_brightness": "input_number.sonos_alarm_light_brightness",
         }
@@ -219,7 +220,7 @@ class AlarmController:
 
         if key in ("weekday_time", "weekend_time", "ramp_minutes") and self.data["enabled"]:
             await self.async_schedule_next()
-        elif key in ("start_volume", "normal_volume", "step_interval", "light_brightness", "light_option") and self.data["status"] == "ramping":
+        elif key in ("start_volume", "normal_volume", "light_brightness", "light_option") and self.data["status"] == "ramping":
             await self.async_start_ramp()
         self._changed()
 
@@ -303,7 +304,12 @@ class AlarmController:
                 await self._set_volume(desired_volume)
                 await self._set_light(float(self.data["light_brightness"]) * fraction)
                 remaining = max(0.1, (target - now).total_seconds())
-                await asyncio.sleep(min(float(self.data["step_interval"]), remaining))
+                interval = calculated_step_interval(
+                    self.data["ramp_minutes"],
+                    self.data["start_volume"],
+                    self.data["normal_volume"],
+                )
+                await asyncio.sleep(min(interval, remaining))
             if self.data["enabled"] and self.data["status"] == "ramping":
                 await self.async_ring()
         except asyncio.CancelledError:
@@ -449,9 +455,19 @@ class AlarmController:
 
     async def _stop_media(self) -> None:
         speaker = self.data.get("speaker_entity", "")
-        if speaker.startswith("media_player."):
-            await self._call("media_player", "media_stop", speaker)
-            await self._call("media_player", "volume_set", speaker, volume_level=0)
+        if not speaker.startswith("media_player."):
+            return
+
+        # A Sonos favorite can be a live stream and the selected room can be a
+        # member of a Sonos group. Pause first because that reliably silences
+        # live streams, then stop as a second supported shutdown command.
+        state = self.hass.states.get(speaker)
+        group_members = state.attributes.get("group_members", []) if state else []
+        targets = stop_targets(speaker, group_members)
+
+        await self._call("media_player", "media_pause", targets)
+        await self._call("media_player", "media_stop", targets)
+        await self._call("media_player", "volume_set", targets, volume_level=0)
 
     async def _set_light(self, brightness_pct: float) -> None:
         entity_id = self.data.get("light_entity", "")
@@ -469,7 +485,9 @@ class AlarmController:
         if entity_id.startswith(("light.", "switch.")):
             await self._call(entity_id.split(".", 1)[0], "turn_off", entity_id)
 
-    async def _call(self, domain: str, service: str, entity_id: str, **data: Any) -> None:
+    async def _call(
+        self, domain: str, service: str, entity_id: str | list[str], **data: Any
+    ) -> None:
         if not entity_id or not self.hass.services.has_service(domain, service):
             return
         try:

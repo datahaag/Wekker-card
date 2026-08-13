@@ -7,7 +7,6 @@ DESCRIPTIONS = (
     ("start_volume", "Startvolume", "mdi:volume-low", 1, 100, "%"),
     ("normal_volume", "Normaal wekvolume", "mdi:volume-high", 1, 100, "%"),
     ("ramp_minutes", "Opbouwtijd", "mdi:chart-line", 1, 60, "min"),
-    ("step_interval", "Volume-interval", "mdi:timer-outline", 1, 300, "s"),
     ("snooze_minutes", "Snoozeduur", "mdi:sleep", 1, 60, "min"),
     ("light_brightness", "Doelhelderheid lichtwekker", "mdi:brightness-6", 1, 100, "%"),
 )

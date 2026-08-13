@@ -9,7 +9,7 @@ from homeassistant.const import Platform
 
 DOMAIN: Final = "wekker_card"
 NAME: Final = "Wekker-card"
-VERSION: Final = "2.0.0"
+VERSION: Final = "2.0.1"
 
 PLATFORMS: Final = (
     Platform.BUTTON,
@@ -31,7 +31,6 @@ DEFAULTS: Final = {
     "start_volume": 2.0,
     "normal_volume": 30.0,
     "ramp_minutes": 15.0,
-    "step_interval": 30.0,
     "snooze_minutes": 9.0,
     "light_brightness": 70.0,
     "speaker_entity": "",
@@ -63,7 +62,6 @@ ENTITY_IDS: Final = {
     "start_volume": "number.wekker_card_start_volume",
     "normal_volume": "number.wekker_card_normal_volume",
     "ramp_minutes": "number.wekker_card_ramp_minutes",
-    "step_interval": "number.wekker_card_step_interval",
     "snooze_minutes": "number.wekker_card_snooze_minutes",
     "light_brightness": "number.wekker_card_light_brightness",
     "speaker_option": "select.wekker_card_speaker",

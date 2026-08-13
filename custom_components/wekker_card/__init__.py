@@ -8,6 +8,7 @@ from homeassistant.components.frontend import add_extra_js_url
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.storage import Store
 
 from .alarm import AlarmController
@@ -22,6 +23,13 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Wekker-card from the UI config entry."""
+    registry = er.async_get(hass)
+    legacy_interval = registry.async_get_entity_id(
+        "number", DOMAIN, f"{entry.entry_id}_step_interval"
+    )
+    if legacy_interval:
+        registry.async_remove(legacy_interval)
+
     controller = AlarmController(hass, entry)
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = controller
 
